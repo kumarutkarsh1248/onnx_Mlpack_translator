@@ -21,22 +21,6 @@ Layer<> *getNetworkReference(const std::string &layerType,
                              std::map<std::string, double> &layerParams);
 
 /**
- * Print the given stl vector
- *
- * @param vec The vector to be printed
- */
-template <typename T>
-void printVector(const std::vector<T> &vec);
-
-/**
- * Print the given stl map where the keys are of type string and
- * values are of type double
- *
- * @param params The map to be printed
- */
-void printMap(std::map<std::string, double> params);
-
-/**
  * Update the values of a given stl map with that of another map
  * corresponding to the keys that are common
  *
