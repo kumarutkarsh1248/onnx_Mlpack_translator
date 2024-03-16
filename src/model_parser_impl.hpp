@@ -3,6 +3,10 @@
 Layer<> *getNetworkReference(const std::string &layerType,
                              std::map<std::string, double> &layerParams)
 {
+  // keys of the original parameters are in form of
+  // onnx
+  //and some special keys which are specific for mlpack
+  // are written in mlpack form
   std::map<std::string, double> origParams;
   Layer<> *layer;
 
@@ -12,6 +16,34 @@ Layer<> *getNetworkReference(const std::string &layerType,
     origParams["outsize"] = NAN;
     updateParams(origParams, layerParams);
     layer = new LinearNoBias(origParams["outsize"], regularizer);
+  }
+  else if (layerType == "convolution")
+  {
+    origParams["maps"] = NAN;
+    origParams["kw"] = NAN;
+    origParams["kh"] = NAN;
+    origParams["dw"] = 1;
+    origParams["dh"] = 1;
+    origParams["padw"] = 0;
+    origParams["padH"] = 0;
+    origParams["paddingtype"] = 0; // None = 0 , Valid = 1, Same = 2
+    updateParams(origParams, layerParams);
+    std::string padding = decodePadType(origParams["paddingtype"]);
+    layer = new Convolution(origParams["maps"], origParams["kw"],
+                              origParams["kh"], origParams["dw"],origParams["dh"], 
+                              origParams["padw"], origParams["padh"],padding);
+  }
+  else if (layerType == "maxpooling")
+  {
+    origParams["kw"] = NAN;
+    origParams["kh"] = NAN;
+    origParams["dw"] = NAN;
+    origParams["dh"] = NAN;
+    updateParams(origParams, layerParams);
+    layer = new MaxPooling(origParams["kw"],
+                            origParams["kh"],
+                            origParams["dw"],
+                            origParams["dh"]);
   }
   // bias addition layer
   else if (layerType == "add")
@@ -30,13 +62,46 @@ Layer<> *getNetworkReference(const std::string &layerType,
   {
     layer = new Identity();
   }
+  else if (layerType == "reshape")
+  {
+    layer = new Identity();
+  }
   else
   {
     Log::Fatal << "Invalid layer type : " << layerType;
     cout << "\n";
   }
-
+  cout<<"********added "<<layerType<<"\n\n"<<endl;
   return layer;
+}
+
+std::string decodePadType(double val)
+{
+  if (val==0)
+    return "None";
+  else if (val==1)
+    return "Valid";
+  else
+    return "Same";
+}
+
+template <typename T>
+void printVector(const std::vector<T> &vec)
+{
+  for (const auto &element : vec)
+  {
+    std::cout << element << " ";
+  }
+  std::cout << std::endl;
+}
+
+void printMap(std::map<std::string, double> params)
+{
+  std::map<std::string, double>::iterator itr;
+  for (itr = params.begin(); itr != params.end(); ++itr)
+  {
+    Log::Info << itr->first << " : " << itr->second << "\n";
+  }
 }
 
 void updateParams(std::map<std::string, double> &origParams,

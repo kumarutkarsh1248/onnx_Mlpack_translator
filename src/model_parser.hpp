@@ -32,5 +32,8 @@ Layer<> *getNetworkReference(const std::string &layerType,
 void updateParams(std::map<std::string, double> &origParams,
                   std::map<std::string, double> &newParams);
 
+std::string decodePadType(double val);
+
+
 #include "model_parser_impl.hpp"
 #endif
