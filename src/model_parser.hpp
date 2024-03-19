@@ -32,8 +32,15 @@ Layer<> *getNetworkReference(const std::string &layerType,
 void updateParams(std::map<std::string, double> &origParams,
                   std::map<std::string, double> &newParams);
 
+/**
+ * getLayer function calls the getNetworkRefrence function with layer
+ * parameters, one of the layer parameter, parameterType is in encoded
+ * form and to decode it we use this function
+ * 0 : default type (padding value needs to be explicitely specified)
+ * 1 : valid (no padding)
+ * 2 : same ( padding should be such that there is no change in dimension)
+*/
 std::string decodePadType(double val);
-
 
 #include "model_parser_impl.hpp"
 #endif

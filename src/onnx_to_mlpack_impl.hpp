@@ -53,7 +53,8 @@ Layer<> *getLayer(GraphProto graph, const NodeProto &node, string layerType)
         {"Add", "add"},
         {"Relu", "relu"},
         {"Softmax", "softmax"},
-        {"Identity", "identity"}};
+        {"Identity", "identity"}
+    };
 
     // ONNX layer attribute
     map<string, map<string, vector<string>>> onnxAttributes;
@@ -174,7 +175,7 @@ int findOutputDimension(const GraphProto &graph, const NodeProto &node)
     {
         if (initializer.name() == nextNod.input(1))
         {
-            dim = initializer.dims(1);
+            dim = initializer.dims().size() > 1 ? initializer.dims(1) : initializer.dims(0);
         }
     }
     return dim;

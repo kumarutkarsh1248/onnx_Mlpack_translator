@@ -3,10 +3,6 @@
 Layer<> *getNetworkReference(const std::string &layerType,
                              std::map<std::string, double> &layerParams)
 {
-  // keys of the original parameters are in form of
-  // onnx
-  //and some special keys which are specific for mlpack
-  // are written in mlpack form
   std::map<std::string, double> origParams;
   Layer<> *layer;
 
