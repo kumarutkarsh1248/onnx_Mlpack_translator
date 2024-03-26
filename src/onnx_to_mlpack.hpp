@@ -46,6 +46,7 @@ std::vector<int> findWeightDims
 void extractWeights(GraphProto &graph, arma::mat &weightMatrix);
 
 /**
+ * more detailed
  * Get the mlpack equivalent model of a given ONNX model without
  * the transfer of weights
  *
